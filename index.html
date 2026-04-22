@@ -3,7 +3,7 @@
   <head>
     <title>CPR AR Trainer - Professional Edition</title>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
     
@@ -17,12 +17,6 @@
       }
 
       body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #000; overflow: hidden; }
-
-      /* University Logo Style */
-      .uni-logo {
-        position: fixed; top: 20px; left: 20px; z-index: 5000;
-        width: 60px; height: auto; pointer-events: none;
-      }
 
       .emergency-btn {
         position: fixed; top: 20px; right: 20px; z-index: 5000;
@@ -46,21 +40,26 @@
       }
 
       .glass-card {
-        background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-        border-radius: 35px; padding: 40px 25px; width: 85%; max-width: 380px;
+        background: var(--glass); backdrop-filter: blur(20px);
+        border-radius: 35px; padding: 30px; width: 85%; max-width: 450px;
         border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+        position: relative;
+      }
+
+      .uni-logo {
+        position: absolute; top: 20px; left: 20px; width: 50px; height: auto;
       }
 
       .how-to-use {
-        text-align: left; background: rgba(0,0,0,0.3); padding: 20px;
-        border-radius: 20px; margin: 25px 0; font-size: 0.85rem; line-height: 1.5;
+        text-align: left; background: rgba(0,0,0,0.3); padding: 15px;
+        border-radius: 15px; margin: 20px 0; font-size: 0.9rem; line-height: 1.4;
       }
       .how-to-use b { color: var(--accent); }
 
       .btn-main {
-        background: #fff; color: #1e3c72; padding: 15px 40px; border: none;
-        border-radius: 50px; font-weight: bold; font-size: 1.1rem; cursor: pointer;
-        transition: 0.3s; width: 100%; max-width: 250px;
+        background: #fff; color: #1e3c72; padding: 18px 50px; border: none;
+        border-radius: 50px; font-weight: bold; font-size: 1.2rem; cursor: pointer;
+        transition: 0.3s;
       }
 
       #ar-ui {
@@ -80,7 +79,7 @@
 
       .instruction-panel {
         position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
-        width: 90%; max-width: 500px; pointer-events: auto;
+        width: 90%; pointer-events: auto;
       }
 
       .info-box {
@@ -96,10 +95,9 @@
         font-size: 1.2rem; cursor: pointer;
       }
 
-      #start-cpr-btn { background: var(--success-green); color: #000; display: none; }
-
-      /* Special button for step 4 */
-      #call-step4-btn { background: #ffeb3b; color: #000; display: none; }
+      #start-cpr-btn {
+        background: var(--success-green); color: #000; display: none;
+      }
 
       .btn-reset {
         flex: 1; background: #333; color: #fff; border-radius: 50px; border: 1px solid #555;
@@ -116,12 +114,12 @@
   </head>
 
   <body>
-    <img src="HSA.png" class="uni-logo" alt="HSA Logo">
 
     <button id="sos-btn" class="emergency-btn" onclick="window.location.href='tel:112'">CALL 112 📞</button>
 
     <div id="landing-page" class="overlay-page">
       <div class="glass-card">
+        <img src="HSA.png" class="uni-logo">
         <h1>CPR AR MISSION</h1>
         <p>Interactive Training Simulation</p>
         
@@ -140,7 +138,6 @@
       <div class="glass-card">
         <h1 style="color: var(--success-green);">MISSION COMPLETE</h1>
         <p>You have mastered the CPR cycle effectively.</p>
-        <p style="font-weight: bold; margin: 15px 0;">Repeat 30:2 cycle until help arrives or the person recovers</p>
         <button class="btn-main" onclick="location.reload()">RESTART</button>
       </div>
     </div>
@@ -155,7 +152,6 @@
         </div>
         <div class="controls">
           <button class="btn-reset" onclick="location.reload()">RESET</button>
-          <button id="call-step4-btn" class="btn-next" onclick="window.location.href='tel:112'">CALL EMERGENCY 📞</button>
           <button id="start-cpr-btn" class="btn-next" onclick="startCPR()">START COMPRESSIONS</button>
           <button id="next-btn-text" class="btn-next" onclick="nextStep()">CONTINUE →</button>
         </div>
@@ -168,6 +164,7 @@
       </a-assets>
 
       <a-marker preset="hiro">
+        
         <a-entity id="group1">
           <a-cone color="#00ff88" radius-bottom="0.2" height="0.6" position="0.6 0.6 0" rotation="180 0 0" animation="property: position; to: 0.6 0.8 0; dir: alternate; dur: 800; loop: true"></a-cone>
           <a-text value="SCENE SAFE" align="center" position="0.6 1.3 0" scale="1.2 1.2 1.2"></a-text>
@@ -189,11 +186,16 @@
         </a-entity>
 
         <a-entity id="group5" visible="false">
-          <a-image id="hand-image" src="#cpr-hands" position="0.6 0.5 0" width="1.2" height="1.2" rotation="-90 0 0"
+          <a-image id="hand-image" src="#cpr-hands" 
+                   position="0.6 0.5 0" 
+                   width="1.2" height="1.2" 
+                   rotation="-90 0 0"
                    animation="property: position; from: 0.6 0.5 0; to: 0.6 0.2 0; dur: 272.5; dir: alternate; loop: true; easing: easeInOutQuad; enabled: false">
           </a-image>
+
           <a-ring color="#ff4b2b" radius-inner="0.35" radius-outer="0.45" position="0.6 0.1 0" rotation="-90 0 0" 
                   animation="property: material.opacity; from: 1; to: 0.2; dur: 272.5; dir: alternate; loop: true"></a-ring>
+          
           <a-text value="PUSH HERE" align="center" position="0.6 1.8 0" scale="1.8 1.8 1.8" color="#ff4b2b"></a-text>
         </a-entity>
 
@@ -201,6 +203,7 @@
           <a-sphere color="#00f2fe" radius="0.3" position="0.6 0.6 -1" opacity="0.5" animation="property: scale; from: 1 1 1; to: 1.5 1.5 1.5; dur: 1000; loop: true; dir: alternate"></a-sphere>
           <a-text value="GIVE 2 BREATHS" align="center" position="0.6 1.4 -1" scale="1.2 1.2 1.2"></a-text>
         </a-entity>
+
       </a-marker>
       <a-entity camera></a-entity>
     </a-scene>
@@ -215,9 +218,9 @@
         "Check surroundings for any immediate danger to you or the victim.",
         "Check responsiveness: Shake shoulders and shout 'Are you okay?'.",
         "Perform head-tilt, chin-lift to clear the airway.",
-        "Check breathing: Look, listen, and feel for normal breaths for 10s.",
+        "Check breathing: Look, listen, and feel for normal breaths for 10s. Call emergency.",
         "Perform 30 chest compressions. Follow the rhythm of the hands and beeps.",
-        "Deliver 2 rescue breaths to complete the cycle."
+        "Give 2 rescue breaths. Repeat 30:2 cycle until help arrives or the person recovers."
       ];
 
       function beep(freq, duration) {
@@ -242,9 +245,9 @@
       function nextStep() {
         clearInterval(timer);
         document.getElementById('cpr-counter').style.display = 'none';
+        
         document.getElementById('next-btn-text').style.display = 'block';
         document.getElementById('start-cpr-btn').style.display = 'none';
-        document.getElementById('call-step4-btn').style.display = 'none';
 
         if (currentStep < 6) {
           document.getElementById('group' + currentStep).setAttribute('visible', 'false');
@@ -255,16 +258,12 @@
           document.getElementById('text-info').innerText = stepsText[currentStep - 1];
           document.getElementById('progress-bar').style.width = (currentStep * 16.6) + '%';
           
-          if (currentStep === 4) {
-            document.getElementById('call-step4-btn').style.display = 'block';
-          }
+          if (currentStep === 6) document.getElementById('next-btn-text').innerText = "FINISH ✓";
           
           if (currentStep === 5) {
             document.getElementById('next-btn-text').style.display = 'none';
             document.getElementById('start-cpr-btn').style.display = 'block';
           }
-
-          if (currentStep === 6) document.getElementById('next-btn-text').innerText = "FINISH ✓";
         } else {
           showFinishPage();
         }
@@ -276,6 +275,7 @@
         document.getElementById('cpr-counter').style.display = 'block';
         document.getElementById('cpr-counter').innerText = count;
         document.getElementById('start-cpr-btn').style.display = 'none';
+        
         handImg.setAttribute('animation', 'enabled: true');
         
         timer = setInterval(() => {
